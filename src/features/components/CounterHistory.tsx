@@ -5,15 +5,15 @@ import type { CounterType } from "../types/CounterType";
 const CounterHistory = () => {
   const state = useSelector((state: CounterType) => state.history);
   return (
-    <div>
+    <div className="my-10 bg-blue-400 w-1/2 py-10 rounded-lg">
       {state.length > 0 ? (
         <ul>
           {state.map((elem) => (
-            <li>{elem}</li>
+            <li className="text-black font-bold">{elem}</li>
           ))}
         </ul>
       ) : (
-        <p>履歴がありません</p>
+        <p className="text-white">履歴がありません</p>
       )}
     </div>
   );

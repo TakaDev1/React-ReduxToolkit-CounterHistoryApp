@@ -8,14 +8,12 @@ import CounterHistory from "./features/components/CounterHistory";
 function App() {
   return (
     <>
-      <div>
+      <div className="bg-gray-800 min-h-screen flex flex-col justify-center items-center">
         <h1>React-ReduxToolkit-CounterHistoryApp</h1>
         <Provider store={store}>
-          <div>
-            <CounterHistory />
-            <ClearButton />
-            <ControlPanel />
-          </div>
+          <CounterHistory />
+          <ClearButton />
+          <ControlPanel />
         </Provider>
       </div>
     </>
