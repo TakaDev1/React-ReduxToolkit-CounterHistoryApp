@@ -1,32 +1,155 @@
-# React + TypeScript + Vite
+# React-ReduxToolkit-CounterHistoryApp
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+React + TypeScript + Redux Toolkit を使用して、カウンターの現在値と変更履歴を管理する練習用アプリです。
 
-Currently, two official plugins are available:
+## 概要
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+カウンターの値をRedux Storeで管理し、カウントが変更されるたびに履歴を保存します。
 
-## React Compiler
+履歴は最新の値が先頭になるように管理し、履歴のリセットも実装しています。
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 使用技術
 
-## Expanding the Oxlint configuration
+* React
+* TypeScript
+* Redux Toolkit
+* React Redux
+* Tailwind CSS
+* Vite
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+## 機能
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
+* カウンターを1増加
+* カウンターを1減少
+* カウント変更時に履歴を保存
+* 最新の履歴を上から表示
+* 履歴をリセット
+* 履歴がない場合のメッセージ表示
+
+## ディレクトリ構成
+
+```text
+src/
+├── app/
+│   └── store.ts
+├── features/
+│   ├── components/
+│   │   ├── ControlPanel.tsx
+│   │   └── CounterHistory.tsx
+│   ├── slices/
+│   │   └── CounterHistory.ts
+│   └── types/
+│       └── CounterType.ts
+├── App.tsx
+├── App.css
+├── index.css
+└── main.tsx
+```
+
+## Redux構成
+
+### State
+
+```ts
+interface CounterType {
+  count: number;
+  history: number[];
 }
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+### Actions
+
+| Action         | 処理              |
+| -------------- | --------------- |
+| `increment`    | カウントを1増加し、履歴に追加 |
+| `decrement`    | カウントを1減少し、履歴に追加 |
+| `clearHistory` | 履歴を空にする         |
+
+### State更新の流れ
+
+```text
+Component
+    ↓
+dispatch(action)
+    ↓
+Redux Store
+    ↓
+Reducer
+    ↓
+State更新
+    ↓
+useSelector
+    ↓
+Componentに反映
+```
+
+## コンポーネント
+
+### ControlPanel
+
+カウンターの増減を操作します。
+
+```text
++ → increment
+- → decrement
+```
+
+現在のカウント値は `useSelector` でRedux Storeから取得します。
+
+### CounterHistory
+
+Redux Storeから `history` を取得して表示します。
+
+履歴の追加には `unshift()` を使用しているため、最新の値が先頭に表示されます。
+
+```ts
+state.history.unshift(state.count);
+```
+
+## Redux Toolkitの役割
+
+### createSlice
+
+StateとReducer、Actionをまとめて定義します。
+
+```ts
+const counterHistorySlice = createSlice({
+  name: "counterHistory",
+  initialState,
+  reducers: {
+    increment: ...,
+    decrement: ...,
+    clearHistory: ...,
+  },
+});
+```
+
+### useDispatch
+
+ComponentからActionをRedux Storeへ送ります。
+
+```ts
+dispatch(increment());
+dispatch(decrement());
+```
+
+### useSelector
+
+Redux Storeが管理しているStateを取得します。
+
+```ts
+const count = useSelector(
+  (state: CounterType) => state.count
+);
+```
+
+## 学習ポイント
+
+* Redux Toolkitの基本構成
+* `createSlice` の使い方
+* `configureStore` にReducerを登録する方法
+* Action creatorとReducerの関係
+* `useDispatch` によるActionのDispatch
+* `useSelector` によるStateの取得
+* Redux StoreとComponent間のデータの流れ
+* Stateにカウンター値と履歴をまとめて管理する方法
