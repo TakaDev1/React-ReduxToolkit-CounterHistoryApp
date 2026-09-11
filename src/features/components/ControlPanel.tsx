@@ -12,7 +12,6 @@ const ControlPanel = () => {
       <p>Count: {count}</p>
       <button onClick={() => dispatch(increment())}>+</button>
       <button onClick={() => dispatch(decrement())}>-</button>
-      <button onClick={() => dispatch(clearHistory())}>Reset</button>
     </div>
   );
 };
