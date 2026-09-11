@@ -7,7 +7,12 @@ const ClearButton = () => {
 
   return (
     <div>
-      <button onClick={() => dispatch(clearHistory())}>リセット</button>
+      <button
+        onClick={() => dispatch(clearHistory())}
+        className="bg-gray-500 text-white cursor-pointer hover:opacity-80 px-20 py-2 rounded-xl mb-10 font-bold"
+      >
+        リセット
+      </button>
     </div>
   );
 };
